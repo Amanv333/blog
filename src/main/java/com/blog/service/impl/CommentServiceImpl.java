@@ -7,7 +7,9 @@ import com.blog.exception.ResourseNotFoundException;
 import com.blog.repository.CommentRepository;
 import com.blog.repository.PostRepository;
 import com.blog.service.CommentService;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CommentServiceImpl implements CommentService {
 
     private CommentRepository commentRepository;
