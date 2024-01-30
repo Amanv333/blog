@@ -25,17 +25,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Postdto CreatePost(Postdto dto) {
-        Post post = new Post();
-        post.setTitle(dto.getTitle());
-        post.setDescription(dto.getDescription());
-        post.setContent(dto.getContent());
+       Post post = mapToPost(dto);
         Post saved = repository.save(post);
-        Postdto newDto = new Postdto();
-        newDto.setTitle(saved.getTitle());
-        newDto.setDescription(saved.getDescription());
-        newDto.setContent(saved.getContent());
-
-        return newDto;
+        return mapToDto(saved);
     }
 
     public Postdto getPostById(long id) {
@@ -63,5 +55,13 @@ public class PostServiceImpl implements PostService {
         newDto.setContent(post.getContent());
         return newDto;
 
+    }
+
+    public Post mapToPost(Postdto dto){
+        Post post = new Post();
+        post.setTitle(dto.getTitle());
+        post.setDescription(dto.getDescription());
+        post.setContent(dto.getContent());
+        return post;
     }
 }
