@@ -7,6 +7,7 @@ import com.blog.exception.ResourseNotFoundException;
 import com.blog.repository.CommentRepository;
 import com.blog.repository.PostRepository;
 import com.blog.service.CommentService;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,9 +16,12 @@ public class CommentServiceImpl implements CommentService {
     private CommentRepository commentRepository;
     private PostRepository postRepository;
 
-    public CommentServiceImpl(CommentRepository commentRepository, PostRepository postRepository) {
+    private ModelMapper modelMapper;
+
+    public CommentServiceImpl(CommentRepository commentRepository, PostRepository postRepository,ModelMapper modelMapper) {
         this.commentRepository = commentRepository;
         this.postRepository = postRepository;
+        this.modelMapper=modelMapper;
     }
 
     @Override
@@ -40,5 +44,34 @@ public class CommentServiceImpl implements CommentService {
         return cmtdto;
 
 
+    }
+
+    @Override
+    public void deleteById(long id) {
+        commentRepository.deleteById(id);
+    }
+
+    @Override
+    public CommentDto updateComment(long id, CommentDto commentDto, long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new ResourseNotFoundException("post is not found by id : " + id));
+        Comment comment = commentRepository.findById(id).orElseThrow(
+                ()->new ResourseNotFoundException("Comment is not found by id : "+id));
+        Comment c = mapToEntity(commentDto);
+        c.setId(comment.getId());
+        c.setPost(post);
+        Comment saved = commentRepository.save(c);
+        return mapToDto(saved);
+
+
+
+
+    }
+    public CommentDto mapToDto(Comment comment){
+        return modelMapper.map(comment, CommentDto.class);
+    }
+
+    public Comment mapToEntity(CommentDto dto){
+        return modelMapper.map(dto, Comment.class);
     }
 }

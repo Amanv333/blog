@@ -25,10 +25,10 @@ public class CommentController {
         commentService.deleteById(id);
         return  new ResponseEntity<>("Comment is deleted",HttpStatus.OK);
     }
-    //http://localhost:8080/api/comments/2
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateComment(@PathVariable long id,@RequestBody CommentDto commentDto){
-        commentService.updateComment(id,commentDto);
-        return new ResponseEntity<>("comment is updated",HttpStatus.OK);
+    //http://localhost:8080/api/comments/1/post/2
+    @PutMapping("/{id}/post/{postId}")
+    public ResponseEntity<?> updateComment(@PathVariable long id,@RequestBody CommentDto commentDto,@PathVariable long postId ){
+        CommentDto dto = commentService.updateComment(id, commentDto, postId);
+        return new ResponseEntity<>(dto,HttpStatus.OK);
     }
 }
