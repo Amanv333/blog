@@ -3,6 +3,7 @@ package com.blog.controller;
 import com.blog.DTO.Postdto;
 import com.blog.entity.Post;
 import com.blog.service.impl.PostServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import java.util.List;
 @RequestMapping("/api/post")
 public class RestPostController {
 
+    @Autowired
     private PostServiceImpl postService;
 
     public RestPostController(PostServiceImpl postService) {
@@ -42,6 +44,11 @@ public class RestPostController {
     ){
         List<Postdto> postDtos = postService.getAllPosts(pageNo,pageSize,sortBy,sortDir);
         return postDtos;
+    }
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> deletePostById(@PathVariable long id){
+        postService.deletePost(id);
+        return new ResponseEntity<>("Post deleted by id : "+id,HttpStatus.OK);
     }
 
 }

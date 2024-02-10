@@ -30,6 +30,14 @@ public class PostServiceImpl implements PostService {
         return mapToDto(saved);
     }
 
+    @Override
+    public void deletePost(long id) {
+        Post post = repository.findById(id).orElseThrow(
+                ()->new ResourseNotFoundException("post not found by : "+id)
+        );
+        repository.deleteById(id);
+    }
+
     public Postdto getPostById(long id) {
         Post post = repository.findById(id).orElseThrow(
                 ()->new ResourseNotFoundException("post not found by : "+id)
