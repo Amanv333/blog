@@ -1,7 +1,10 @@
 package com.blog.service.impl;
 
 import com.blog.DTO.SighnUpDto;
+import com.blog.entity.Role;
 import com.blog.entity.User;
+import com.blog.exception.ResourseNotFoundException;
+import com.blog.repository.RoleRepository;
 import com.blog.repository.UserRepository;
 import com.blog.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +13,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Service
 public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private RoleRepository roleRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Override
@@ -30,6 +38,13 @@ public class AuthServiceImpl implements AuthService {
         user.setEmail(sighnUpDto.getEmail());
         user.setUsername(sighnUpDto.getUsername());
         user.setPassword(passwordEncoder.encode(sighnUpDto.getPassword()));
+
+        Role role = roleRepository.findByName(sighnUpDto.getRoleType()).orElseThrow(
+                ()->new ResourseNotFoundException("Role is not there"));
+
+        Set<Role> roleSet = new HashSet<>();
+        roleSet.add(role);
+        user.setRoles(roleSet);
 
         userRepository.save(user);
 

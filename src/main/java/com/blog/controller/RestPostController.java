@@ -45,10 +45,17 @@ public class RestPostController {
         List<Postdto> postDtos = postService.getAllPosts(pageNo,pageSize,sortBy,sortDir);
         return postDtos;
     }
-    @DeleteMapping("{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deletePostById(@PathVariable long id){
         postService.deletePost(id);
         return new ResponseEntity<>("Post deleted by id : "+id,HttpStatus.OK);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updatePost(@PathVariable long id, @RequestBody Postdto dto){
+        postService.updatePost(id,dto);
+
+        return new ResponseEntity<>("post update succesfully with id : "+ id,HttpStatus.OK);
     }
 
 }

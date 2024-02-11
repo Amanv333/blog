@@ -38,6 +38,18 @@ public class PostServiceImpl implements PostService {
         repository.deleteById(id);
     }
 
+    @Override
+    public void updatePost(long id, Postdto dto) {
+        Post post = repository.findById(id).orElseThrow(
+                ()->new ResourseNotFoundException("post not found by : "+id)
+        );
+        post.setDescription(dto.getDescription());
+        post.setTitle(dto.getTitle());
+        post.setContent(dto.getContent());
+
+        repository.save(post);
+    }
+
     public Postdto getPostById(long id) {
         Post post = repository.findById(id).orElseThrow(
                 ()->new ResourseNotFoundException("post not found by : "+id)

@@ -7,4 +7,6 @@ public interface PostService {
     public Postdto CreatePost(Postdto post);
 
     void deletePost(long id);
+
+    void updatePost(long id, Postdto dto);
 }
